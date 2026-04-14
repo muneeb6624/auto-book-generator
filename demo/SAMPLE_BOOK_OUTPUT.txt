@@ -1,0 +1,11 @@
+# Sample compiled book output format
+
+This file shows the shape produced by POST /api/books/:id/compile (text/plain attachment).
+
+## Chapter 1: Introduction
+
+Sample chapter body would appear here after generation.
+
+## Chapter 2: Core ideas
+
+Another chapter merged in order by chapter_index.

@@ -1,0 +1,24 @@
+{
+  "name": "automated-book-generation",
+  "version": "1.0.0",
+  "description": "Human-in-the-loop book generation API (Express + Supabase + Gemini)",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "cors": "^2.8.6",
+    "docx": "^9.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemailer": "^6.9.16"
+  }
+}

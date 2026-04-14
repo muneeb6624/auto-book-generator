@@ -1,0 +1,21 @@
+n8n (Docker) calling Express on Windows
+=====================================
+
+1. Start the API on the host: npm run dev (default http://localhost:3000).
+
+2. In n8n, create a workflow:
+   - Add node "Webhook" (POST), path e.g. book-outline, Authentication None.
+   - Add node "HTTP Request":
+     - Method POST
+     - URL: http://host.docker.internal:3000/api/books/<BOOK_UUID>/outline/generate
+       Or use expression: http://host.docker.internal:3000/api/books/{{ $json.body.bookId }}/outline/generate
+       (Webhook v2: JSON body fields are often under $json.body)
+   - Connect Webhook -> HTTP Request.
+   - Activate workflow and copy the "Test URL" or Production URL.
+
+3. Test from host PowerShell (replace WEBHOOK_URL and BOOK_ID):
+   curl -X POST WEBHOOK_URL -H "Content-Type: application/json" -d "{\"bookId\":\"BOOK_UUID\"}"
+
+4. Export workflow: n8n menu -> Download, and submit the JSON with your trial zip/repo.
+
+Note: The bundled webhook-to-express.json is a structural sketch; n8n version differences may require re-creating the two nodes in the UI and exporting fresh JSON.
