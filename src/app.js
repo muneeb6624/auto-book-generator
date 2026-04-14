@@ -14,7 +14,12 @@ app.get('/health', (req, res) => {
   res.json({ ok: true, service: 'book-generation-api' });
 });
 
-app.use('/api-docs', docsRoutes);
+// Without trailing slash, ./swagger-ui-*.js resolves to site root → HTML 404 → "Unexpected token '<'".
+app.get('/api-docs', (req, res) => {
+  res.redirect(308, '/api-docs/');
+});
+
+app.use('/api-docs/', docsRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/chapters', chapterRoutes);
 

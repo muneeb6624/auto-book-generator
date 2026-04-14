@@ -9,9 +9,12 @@ router.get('/openapi.json', (req, res) => {
   res.json(buildOpenApiSpec(req));
 });
 
+// `serve` is an array of middleware; spread so static assets (swagger-ui-*.js) are registered.
+const serveStack = Array.isArray(swaggerUi.serve) ? swaggerUi.serve : [swaggerUi.serve];
+
 router.use(
   '/',
-  swaggerUi.serve,
+  ...serveStack,
   swaggerUi.setup(undefined, {
     swaggerOptions: {
       url: '/api-docs/openapi.json',
