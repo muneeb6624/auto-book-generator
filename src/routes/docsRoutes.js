@@ -1,30 +1,37 @@
 import { Router } from 'express';
-import swaggerUi from 'swagger-ui-express';
 import { buildOpenApiSpec } from '../docs/openapi.js';
 
 const router = Router();
 
-// Stops express.static from 301/302 between /api-docs and /api-docs/, which caused ERR_TOO_MANY_REDIRECTS
-// with our bare-path redirect. Same stack as swagger-ui-express `serve`, with options forwarded to static.
-const serve =
-  typeof swaggerUi.serveWithOptions === 'function'
-    ? swaggerUi.serveWithOptions({ redirect: false })
-    : Array.isArray(swaggerUi.serve)
-      ? swaggerUi.serve
-      : [swaggerUi.serve];
+router.get('/openapi.json', (req, res) => {
+  res.json(buildOpenApiSpec(req));
+});
 
-function attachSpec(req, res, next) {
-  req.swaggerDoc = buildOpenApiSpec(req);
-  next();
-}
-
-router.use(
-  ...serve,
-  attachSpec,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: { persistAuthorization: true },
-    customSiteTitle: 'Book API docs',
-  })
-);
+router.get('/', (req, res) => {
+  const openApiUrl = `${req.baseUrl}/openapi.json`;
+  res.type('html').send(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book API docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.ui = SwaggerUIBundle({
+        url: ${JSON.stringify(openApiUrl)},
+        dom_id: '#swagger-ui',
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: 'StandaloneLayout',
+        persistAuthorization: true
+      });
+    </script>
+  </body>
+</html>`);
+});
 
 export default router;
