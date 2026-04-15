@@ -30,6 +30,11 @@ export function buildOpenApiSpec(req) {
         },
       },
       '/api/books': {
+        get: {
+          tags: ['Books'],
+          summary: 'List books',
+          responses: { '200': { description: 'Array of book summaries' } },
+        },
         post: {
           tags: ['Books'],
           summary: 'Create book',

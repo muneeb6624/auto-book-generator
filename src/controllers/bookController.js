@@ -11,6 +11,19 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+export async function listBooks(req, res, next) {
+  try {
+    const { data, error } = await supabase
+      .from('books')
+      .select('id, title, outline_status, book_output_status, created_at, updated_at')
+      .order('updated_at', { ascending: false });
+    if (error) throw Object.assign(new Error(error.message), { status: 500 });
+    res.json(data ?? []);
+  } catch (e) {
+    next(e);
+  }
+}
+
 export async function createBook(req, res, next) {
   try {
     const { title, notes_on_outline_before } = req.body || {};

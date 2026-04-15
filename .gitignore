@@ -40,3 +40,9 @@ build/
 # Markdown — only README.md is tracked (everything else *.md is ignored)
 *.md
 !README.md
+
+# Frontend
+frontend/node_modules/
+frontend/
+
+outputs/

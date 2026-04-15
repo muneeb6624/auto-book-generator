@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  listBooks,
   createBook,
   getBook,
   generateOutlineHandler,
@@ -14,6 +15,7 @@ import { compileBook } from '../controllers/compileController.js';
 
 const router = Router();
 
+router.get('/', listBooks);
 router.post('/', createBook);
 router.get('/:id/chapters', listChaptersForBook);
 router.get('/:id', getBook);
